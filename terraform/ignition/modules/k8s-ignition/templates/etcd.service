@@ -1,0 +1,25 @@
+[Unit]
+Description=Run etcd
+Requires=afterburn.service
+After=afterburn.service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment=ETCD_IMAGE_TAG=latest
+EnvironmentFile=-/etc/sysconfig/etcd
+EnvironmentFile=/run/metadata/afterburn
+ExecStartPre=mkdir -p /var/lib/etcd
+ExecStartPre=-/bin/podman kill etcd
+ExecStartPre=-/bin/podman rm etcd
+ExecStartPre=-/bin/podman pull quay.io/coreos/etcd
+ExecStart=/bin/podman run --name etcd --volume /var/lib/etcd:/var/lib/etcd:z --volume /etc/kubernetes/pki/etcd:/etc/kubernetes/pki/etcd:ro --net=host --env-host quay.io/coreos/etcd:$${ETCD_IMAGE_TAG} \
+          /usr/local/bin/etcd --data-dir /var/lib/etcd \
+                --name=${HOSTNAME} \
+                --initial-advertise-peer-urls https://${PRIVATE_IPV4}:2380 \
+                --advertise-client-urls https://${PRIVATE_IPV4}:2379
+
+ExecStop=/bin/podman stop etcd
+
+[Install]
+WantedBy=multi-user.target

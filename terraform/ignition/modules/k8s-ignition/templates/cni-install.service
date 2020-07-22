@@ -1,0 +1,17 @@
+[Unit]
+Description=Install system cni plugin
+ConditionFirstBoot=yes
+
+Wants=network-online.target
+After=network-online.target
+After=multi-user.target
+Before=boot-complete.target
+
+[Service]
+Type=oneshot
+ExecStartPre=mkdir -p /opt/cni/bin
+ExecStart=/bin/sh -c '/usr/bin/curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz" | tar -C /opt/cni/bin -xz'
+
+[Install]
+RequiredBy=boot-complete.target
+WantedBy=multi-user.target
