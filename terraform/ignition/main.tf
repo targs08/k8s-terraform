@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "ignition" {
-  source = "./modules/k8s-ignition"
+  source = "./modules/k8s-bootstrap-ignition"
   provider_name = "aws"
 }
 
