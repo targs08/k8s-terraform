@@ -22,11 +22,6 @@ output "data" {
       [
           data.ignition_file.crictl.rendered,
       ])
-    links = [
-      data.ignition_link.crictl.rendered,
-      data.ignition_link.kubeadm.rendered,
-      data.ignition_link.kubectl.rendered,
-    ]
     systemd = [
       data.ignition_systemd_unit.cni-install.rendered,
       data.ignition_systemd_unit.docker-service.rendered,

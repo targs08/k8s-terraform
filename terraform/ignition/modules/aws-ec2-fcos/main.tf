@@ -46,9 +46,11 @@ resource "aws_instance" "instances" {
   tags               = merge({"Name" = format("n%s.%s", count.index + 1, var.name), "Role" = lookup(var.config[count.index], "role")}, local.tags)
   volume_tags        = merge(local.tags, {"Instance" = format("n%s.%s", count.index + 1, var.name)})
 
+  iam_instance_profile = var.instance_profile
+
   lifecycle {
     # Ignore changes in the AMI which force recreation of the resource. This
-    # avoids accidental deletion of nodes whenever a new Fedore CoreOs Release
+    # avoids accidental deletion of nodes whenever a new Fedora CoreOs Release
     # come out.
     ignore_changes = [ami]
   }

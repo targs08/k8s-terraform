@@ -15,6 +15,11 @@ variable "subnet_id" {
   type = string
 }
 
+variable "instance_profile" {
+  type    = string
+  default = ""
+}
+
 variable "config" {
   type = list(object({
     type = string

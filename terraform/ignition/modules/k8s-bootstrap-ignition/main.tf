@@ -59,7 +59,7 @@ data "ignition_file" "rootfs" {
 
 data "ignition_file" "crictl" {
     path = "/opt/bin/crictl"
-    mode = 0755
+    mode = 493
     overwrite = true
     source {
         source = format("https://github.com/kubernetes-sigs/cri-tools/releases/download/%[1]s/crictl-%[1]s-linux-%[2]s.tar.gz",
@@ -70,35 +70,13 @@ data "ignition_file" "crictl" {
 
 data "ignition_file" "kubernetes-component" {
   count = length(local.kubernetes-component)
-  mode = 0755
+  mode = 493
   overwrite = true
   path = format("/opt/bin/%s", local.kubernetes-component[count.index])
   source {
     source = format("https://storage.googleapis.com/kubernetes-release/release/%s/bin/linux/%s/%s",
                                                       var.versions.kubernetes, var.arch, local.kubernetes-component[count.index])
   }
-}
-
-
-data "ignition_link" "crictl" {
-  path = "/usr/local/bin/crictl"
-  target = "/opt/bin/crictl"
-  overwrite = true
-  hard = false
-}
-
-data "ignition_link" "kubeadm" {
-    path = "/usr/local/bin/kubeadm"
-    target = "/opt/bin/kubeadm"
-    overwrite = true
-    hard = false
-}
-
-data "ignition_link" "kubectl" {
-    path = "/usr/local/bin/kubectl"
-    target = "/opt/bin/kubectl"
-    overwrite = true
-    hard = false
 }
 
 
@@ -155,11 +133,6 @@ data "ignition_config" "config" {
     [
         data.ignition_file.crictl.rendered,
     ])
-  links = [
-    data.ignition_link.crictl.rendered,
-    data.ignition_link.kubeadm.rendered,
-    data.ignition_link.kubectl.rendered,
-  ]
   systemd = [
     data.ignition_systemd_unit.cni-install.rendered,
     data.ignition_systemd_unit.docker-service.rendered,
