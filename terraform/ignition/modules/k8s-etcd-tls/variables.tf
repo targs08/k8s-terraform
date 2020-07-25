@@ -1,5 +1,4 @@
 
-
 variable "period" {
   type = string
   // Default is 3 years

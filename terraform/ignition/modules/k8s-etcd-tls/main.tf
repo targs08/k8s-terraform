@@ -8,7 +8,7 @@ locals {
   ]
 }
 
-# Add user-defined ca
+# TODO: Add user-defined ca
 module "ca" {
   source = "../tls/self-signed-cert"
 

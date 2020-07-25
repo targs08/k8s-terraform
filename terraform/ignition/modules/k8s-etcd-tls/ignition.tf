@@ -15,6 +15,10 @@ locals {
       content = module.ca.cert_pem
     },
     {
+      name = "etcd/ca.key"
+      content = module.ca.private_key_pem
+    },
+    {
       name = "etcd/healthcheck-client.crt"
       content = module.healthcheck-client.cert_pem
     },
@@ -31,6 +35,7 @@ data "ignition_file" "tls" {
     mode = split(".",local.tls_files[count.index].name)[1] == "key" ? 384 : 420
     source {
       source = format("s3://%s/%s/tls/%s", var.s3.bucket, var.s3.path, local.tls_files[count.index].name)
+      verification = format("%s-%s", "sha256", sha256(local.tls_files[count.index].content))
     }
 }
 

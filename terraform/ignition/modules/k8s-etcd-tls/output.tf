@@ -21,7 +21,7 @@ output "ignition" {
 output "ignition_append" {
   value = {
     source = format("s3://%s/%s", aws_s3_bucket_object.ignition.bucket, aws_s3_bucket_object.ignition.key)
-    verification = ""
+    verification = format("%s-%s", "sha256", sha256(data.ignition_config.config.rendered))
   }
 }
 
