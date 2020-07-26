@@ -10,12 +10,14 @@ variable "s3" {
     enabled = bool
     bucket = string
     path = string
+    scheme = string
   })
 
   default = {
     enabled = false
     bucket = ""
     path = ""
+    scheme = "s3"
   }
 
   description = "Upload to s3"

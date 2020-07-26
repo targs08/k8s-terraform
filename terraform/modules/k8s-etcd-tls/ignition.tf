@@ -34,7 +34,9 @@ data "ignition_file" "tls" {
     path = format("%s/%s", local.k8s_pki_dir, local.tls_files[count.index].name)
     mode = split(".",local.tls_files[count.index].name)[1] == "key" ? 384 : 420
     source {
-      source = format("s3://%s/%s/tls/%s", var.s3.bucket, var.s3.path, local.tls_files[count.index].name)
+      source = format("%s://%s/%s/tls/%s", var.s3.scheme, var.s3.scheme == "s3" ?
+              data.aws_s3_bucket.bucket.bucket : data.aws_s3_bucket.bucket.bucket_domain_name,
+                  var.s3.path, local.tls_files[count.index].name)
       verification = format("%s-%s", "sha256", sha256(local.tls_files[count.index].content))
     }
 }
