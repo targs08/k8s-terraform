@@ -1,0 +1,16 @@
+[Unit]
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment=AFTERBURN_FILE=/run/metadata/afterburn
+Environment=AFERBURN_PUBLIC_IFACE=eth0
+Environment=AFERBURN_PRIVATE_IFACE=eth1
+
+ExecStartPre=mkdir -p /run/metadata/
+ExecStartPre=rm -rf $AFTERBURN_FILE
+# Empty ExecStart= prevents the previously defined ExecStart from running
+ExecStart=
+ExecStart=/bin/sh -c "echo AFTERBURN_CUSTOM_HOSTNAME=$(hostname) >> $AFTERBURN_FILE"
+ExecStart=/bin/sh -c "echo AFTERBURN_CUSTOM_PUBLIC_IPV4=$(/usr/bin/nmcli -g IP4.ADDRESS d show $AFERBURN_PUBLIC_IFACE | cut -d\/  -f1) >> $AFTERBURN_FILE"
+ExecStart=/bin/sh -c "echo AFTERBURN_CUSTOM_PRIVATE_IPV4=$(/usr/bin/nmcli -g IP4.ADDRESS d show $AFERBURN_PRIVATE_IFACE | cut -d\/  -f1) >> $AFTERBURN_FILE"

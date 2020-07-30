@@ -1,0 +1,19 @@
+[connection]
+id=Wired Private Connection
+interface-name=eth1
+type=ethernet
+permissions=
+
+[ethernet]
+mac-address-blacklist=
+
+[ipv4]
+never-default=true
+method=auto
+
+[ipv6]
+never-default=true
+addr-gen-mode=eui64
+method=auto
+
+[proxy]

@@ -1,0 +1,19 @@
+[connection]
+id=Wired Connection
+interface-name=eth0
+type=ethernet
+permissions=
+
+[ethernet]
+mac-address-blacklist=
+
+[ipv4]
+dns-search=
+method=auto
+
+[ipv6]
+addr-gen-mode=eui64
+dns-search=
+method=auto
+
+[proxy]
