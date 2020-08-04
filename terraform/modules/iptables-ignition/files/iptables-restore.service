@@ -1,0 +1,20 @@
+[Unit]
+Description=Apply iptables rules
+Before=network.target
+After=iptables-restore.service
+Requires=iptables-restore.service
+
+[Service]
+Type=oneshot
+
+Environment=IPTABLES_RULE_FILE=/etc/sysconfig/iptables
+
+ExecStart=-/usr/sbin/iptables --flush INPUT
+ExecStart=-/usr/sbin/iptables --flush RESTRICT-INPUT
+ExecStart=/usr/sbin/iptables-restore --noflush $IPTABLES_RULE_FILE
+ExecStop=-/usr/sbin/iptables --flush INPUT
+ExecStop=-/usr/sbin/iptables --flush RESTRICT-INPUT
+RemainAfterExit=yes
+
+[Install]
+RequiredBy=network.target
