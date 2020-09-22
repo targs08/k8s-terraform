@@ -2,11 +2,8 @@
 locals {
   # Fedora owner
   ami_owner = "125523088429"
-  default_volume_size = 50
-  instance_count = length(var.config)
   tags = {
-    "Cluster" = var.name,
-    "Type"    = "Kubernetes",
+    "Name" = var.name
   }
 }
 
@@ -36,15 +33,14 @@ data "aws_ami" "fcos_ami" {
   }
 }
 
-resource "aws_instance" "instances" {
-  count              = local.instance_count
+resource "aws_instance" "instance" {
   ami                = data.aws_ami.fcos_ami.id
-  instance_type      = lookup(var.config[count.index], "type")
+  instance_type      = var.type
   subnet_id          = var.subnet_id
   key_name           = var.key_name
   user_data          = var.user_data
-  tags               = merge({"Name" = format("n%s.%s", count.index + 1, var.name), "Role" = lookup(var.config[count.index], "role")}, local.tags)
-  volume_tags        = merge(local.tags, {"Instance" = format("n%s.%s", count.index + 1, var.name)})
+  tags               = merge(local.tags, var.tags)
+  volume_tags        = merge(local.tags, {"Instance" = var.name}, var.tags)
 
   iam_instance_profile = var.instance_profile
 
@@ -56,6 +52,6 @@ resource "aws_instance" "instances" {
   }
 
   root_block_device {
-    volume_size = lookup(var.config[count.index], "volume_size", local.default_volume_size)
+    volume_size = var.volume_size
   }
 }

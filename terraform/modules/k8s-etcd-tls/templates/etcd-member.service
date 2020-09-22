@@ -1,0 +1,28 @@
+[Service]
+Environment="ETCD_LISTEN_PEER_URLS=https://0.0.0.0:2380"
+Environment="ETCD_LISTEN_CLIENT_URLS=https://0.0.0.0:2379,http://127.0.0.1:4001"
+
+# DNS bootstraping
+Environment="ETCD_DISCOVERY_SRV=${DISCOVERY_SRV}"
+Environment="ETCDCTL_DISCOVERY_SRV=${DISCOVERY_SRV}"
+
+# Manual bootstraping
+# Environment="ETCD_INITIAL_CLUSTER=${INITIAL_CLUSTER}"
+
+Environment="ETCD_INITIAL_CLUSTER_STATE=new"
+Environment="ETCD_INITIAL_CLUSTER_TOKEN=${INITIAL_CLUSTER_TOKEN}"
+
+# Environment="ETCD_AUTO_TLS=true"
+Environment="ETCD_CLIENT_CERT_AUTH=true"
+Environment="ETCD_TRUSTED_CA_FILE=/etc/kubernetes/pki/etcd/ca.crt"
+Environment="ETCD_CERT_FILE=/etc/kubernetes/pki/etcd/node.crt"
+Environment="ETCD_KEY_FILE=/etc/kubernetes/pki/etcd/node.key"
+Environment="ETCDCTL_CA_FILE=/etc/kubernetes/pki/etcd/ca.crt"
+Environment="ETCDCTL_CERT_FILE=/etc/kubernetes/pki/etcd/node.crt"
+Environment="ETCDCTL_KEY_FILE=/etc/kubernetes/pki/etcd/node.key"
+
+# Environment="ETCD_PEER_AUTO_TLS=true"
+Environment="ETCD_PEER_CLIENT_CERT_AUTH=true"
+Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/kubernetes/pki/etcd/ca.crt"
+Environment="ETCD_PEER_CERT_FILE=/etc/kubernetes/pki/etcd/node.crt"
+Environment="ETCD_PEER_KEY_FILE=/etc/kubernetes/pki/etcd/node.key"

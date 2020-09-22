@@ -20,14 +20,28 @@ variable "instance_profile" {
   default = ""
 }
 
-variable "config" {
-  type = list(object({
-    type = string
-    role = string
-    volume_size = string
-  }))
-  description = "List of options to generate instances"
+variable "type" {
+  type = string
 }
+
+variable "volume_size" {
+  type = number
+  default = 50
+}
+
+variable "tags" {
+  type = map(string)
+  default = {}
+}
+
+//variable "config" {
+//  type = list(object({
+//    type = string
+//    role = string
+//    volume_size = string
+//  }))
+//  description = "List of options to generate instances"
+//}
 
 
 //variable "ssh_public_key" {

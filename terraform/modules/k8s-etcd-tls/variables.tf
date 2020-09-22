@@ -22,3 +22,24 @@ variable "s3" {
 
   description = "Upload to s3"
 }
+
+variable "discovery_dns" {
+  type = string
+}
+
+variable "nodes" {
+  type = list(string)
+  default = []
+}
+
+variable "sans" {
+  type = object({
+    dns_names = list(string)
+    ip_addresses = list(string)
+  })
+
+  default = {
+    dns_names = []
+    ip_addresses = []
+  }
+}
