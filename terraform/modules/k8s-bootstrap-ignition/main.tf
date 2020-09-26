@@ -79,6 +79,23 @@ data "ignition_file" "kubernetes-component" {
   }
 }
 
+data "ignition_link" "kubelet" {
+  path = "/usr/local/bin/kubelet"
+  target = "/opt/bin/kubelet"
+  overwrite = true
+}
+
+data "ignition_link" "kubectl" {
+  path = "/usr/local/bin/kubectl"
+  target = "/opt/bin/kubectl"
+  overwrite = true
+}
+
+data "ignition_link" "kubeadm" {
+  path = "/usr/local/bin/kubeadm"
+  target = "/opt/bin/kubeadm"
+  overwrite = true
+}
 
 data "ignition_systemd_unit" "cni-install" {
   name = "cni-install.service"
@@ -133,6 +150,11 @@ data "ignition_config" "config" {
     [
         data.ignition_file.crictl.rendered,
     ])
+  links = [
+    data.ignition_link.kubeadm.rendered,
+    data.ignition_link.kubectl.rendered,
+    data.ignition_link.kubelet.rendered
+  ]
   systemd = [
     data.ignition_systemd_unit.cni-install.rendered,
     data.ignition_systemd_unit.docker-service.rendered,
