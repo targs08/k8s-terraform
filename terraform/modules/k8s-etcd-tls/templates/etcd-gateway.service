@@ -1,0 +1,28 @@
+[Unit]
+Description=Run gateway etcd
+Requires=afterburn.service
+After=etcd.service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# DNS discovery
+Environment="ETCD_GATEWAY_DISCOVERY=–-discovery-srv ${DISCOVERY_SRV}"
+
+# Manual bootstraping
+# Environment="ETCD_INITIAL_CLUSTER=${INITIAL_CLUSTER}"
+
+Environment=ETCD_IMAGE_TAG=latest
+EnvironmentFile=-/etc/sysconfig/etcd
+ExecStartPre=-/bin/podman kill etcd-gateway
+ExecStartPre=-/bin/podman rm etcd-gateway
+ExecStartPre=-/bin/podman pull quay.io/coreos/etcd
+ExecStart=/bin/podman run --name etcd-gateway --net=host --env-host --volume /etc/kubernetes/pki/etcd/healthcheck-client.crt:/etc/kubernetes/pki/etcd/healthcheck-client.crt:ro quay.io/coreos/etcd:$${ETCD_IMAGE_TAG} \
+          /usr/local/bin/etcd gateway start $${ETCD_GATEWAY_DISCOVERY} \
+                –-listen-addr 127.0.0.1:23790 \
+                –-trusted-ca-file /etc/kubernetes/pki/etcd/healthcheck-client.crt
+
+ExecStop=/bin/podman stop etcd-gateway
+
+[Install]
+WantedBy=multi-user.target

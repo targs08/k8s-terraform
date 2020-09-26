@@ -86,10 +86,17 @@ data "ignition_systemd_unit" "etcd" {
   }
 }
 
+data "ignition_systemd_unit" "etcd-gateway" {
+  name = "etcd-gateway.service"
+  enabled = true
+  content = templatefile(format("%s/templates/etcd-gateway.service", path.module), local.etcd_bootstrap_vars)
+}
+
 data "ignition_config" "common" {
   files = data.ignition_file.tls.*.rendered
   systemd = [
-    data.ignition_systemd_unit.etcd.rendered
+    data.ignition_systemd_unit.etcd.rendered,
+    data.ignition_systemd_unit.etcd-gateway.rendered
   ]
 }
 
