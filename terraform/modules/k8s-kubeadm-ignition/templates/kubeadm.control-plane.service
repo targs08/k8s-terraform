@@ -1,0 +1,25 @@
+[Unit]
+Description=Join node to Kubernetes
+ConditionFirstBoot=yes
+
+Wants=network-online.target
+After=network-online.target
+After=multi-user.target
+After=overlay-install.service
+After=etcd.service
+Before=boot-complete.target
+
+[Service]
+Environment="KUBEADM_ARGS=--config /etc/kubernetes/kubeadm-config.yaml"
+
+Type=oneshot
+ExecStartPre=/opt/bin/kubeadm init phase certs apiserver $KUBEADM_ARGS
+ExecStartPre=/opt/bin/kubeadm init phase certs apiserver-kubelet-client $KUBEADM_ARGS
+ExecStartPre=/opt/bin/kubeadm init phase certs front-proxy-client $KUBEADM_ARGS
+ExecStartPre=/opt/bin/kubeadm config images pull $KUBEADM_ARGS
+ExecStart=echo "kubeadm join"
+# ExecStart=/opt/bin/kubeadm join --control-plane $KUBEADM_ARGS
+
+[Install]
+RequiredBy=boot-complete.target
+WantedBy=multi-user.target
