@@ -16,8 +16,8 @@ ExecStartPre=-/bin/podman pull quay.io/coreos/etcd
 ExecStart=/bin/podman run --name etcd --volume /var/lib/etcd:/var/lib/etcd:z --volume /etc/kubernetes/pki/etcd:/etc/kubernetes/pki/etcd:ro --net=host --env-host quay.io/coreos/etcd:$${ETCD_IMAGE_TAG} \
           /usr/local/bin/etcd --data-dir /var/lib/etcd \
                 --name=${HOSTNAME} \
-                --initial-advertise-peer-urls https://${PRIVATE_IPV4}:2380 \
-                --advertise-client-urls https://${PRIVATE_IPV4}:2379
+                --initial-advertise-peer-urls https://${IPV4}:2380 \
+                --advertise-client-urls https://${IPV4}:2379
 
 ExecStop=/bin/podman stop etcd
 

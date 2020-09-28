@@ -58,7 +58,12 @@ data "ignition_config" "config" {
   users = [data.ignition_user.core_user.rendered]
 
   merge {
-    source = format("data:text/plain;charset=utf-8;base64,%s", base64encode(var.ignition == "" ? data.ignition_config.blank.rendered : var.ignition))
-    verification = ""
+    source = var.ignition_append.source
+    verification = var.ignition_append.verification
+  }
+
+  merge {
+    source = var.ignition_append_node[count.index].source
+    verification = var.ignition_append_node[count.index].verification
   }
 }

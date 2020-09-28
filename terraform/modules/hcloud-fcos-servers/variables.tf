@@ -22,10 +22,25 @@ variable "config" {
   description = "List of options to generate Hetzner Cloud instances"
 }
 
-variable "ignition" {
-  type = string
+variable "ignition_append" {
+  type = object({
+    source = string
+    verification = string
+  })
   description = "Append ignition configuration"
-  default = ""
+  default = {
+    source = "data:text/plain;charset=utf-8;base64,eyJpZ25pdGlvbiI6eyJjb25maWciOnsicmVwbGFjZSI6eyJ2ZXJpZmljYXRpb24iOnt9fX0sInByb3h5Ijp7fSwic2VjdXJpdHkiOnsidGxzIjp7fX0sInRpbWVvdXRzIjp7fSwidmVyc2lvbiI6IjMuMS4wIn0sInBhc3N3ZCI6e30sInN0b3JhZ2UiOnt9LCJzeXN0ZW1kIjp7fX0="
+    verification = ""
+  }
+}
+
+variable "ignition_append_node" {
+  type = list(object({
+    source = string
+    verification = string
+  }))
+  description = "Append ignition configuration for each node"
+  default = []
 }
 
 //variable "ignition_merge" {

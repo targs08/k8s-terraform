@@ -15,6 +15,15 @@ variable "provider_name" {
   default = "custom"
 }
 
+variable "etcd_advertise_mode" {
+  default = "private"
+
+  validation {
+    condition     = can(regex("(private|public)", var.etcd_advertise_mode))
+    error_message = "Etcd advertise mode must be private or public."
+  }
+}
+
 variable "packages" {
   type = list(string)
   description = "Extra packages for rpm-ostree repository"

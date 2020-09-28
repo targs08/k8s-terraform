@@ -40,6 +40,7 @@ resource "hcloud_server" "servers" {
   server_type = lookup(var.config[count.index], "type")
   ssh_keys = concat([hcloud_ssh_key.bootstrap.id], var.ssh_keys)
   location = element(data.hcloud_location.location.*.name, count.index)
+  user_data = format("#%s", sha256(data.ignition_config.config[count.index].rendered))
   keep_disk = true
   labels = merge(
     var.labels,

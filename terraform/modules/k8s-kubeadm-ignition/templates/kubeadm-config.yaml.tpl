@@ -3,6 +3,7 @@ apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 nodeRegistration:
   kubeletExtraArgs:
+    cloud-provider: ${KUBELET_CLOUD_PROVIDER}
     network-plugin: ${KUBELET_NETWORK_PLUGIN}
     volume-plugin-dir: /var/lib/kubelet/volumeplugins
 ---
@@ -15,7 +16,7 @@ controlPlaneEndpoint: ${KUBE_CONTROL_PLANE_ENDPOINT}
 certificatesDir: /etc/kubernetes/pki
 networking:
   serviceSubnet: 10.96.0.0/12
-  podSubnet: 10.100.0.1/24
+  podSubnet: 10.244.0.0/16
   dnsDomain: cluster.local
 etcd:
   external:
@@ -30,9 +31,9 @@ apiServer:
   extraArgs: {}
 controllerManager:
   extraArgs:
+    allocate-node-cidrs: "true"
     cluster-signing-cert-file: /etc/kubernetes/pki/ca.crt
     cluster-signing-key-file: /etc/kubernetes/pki/ca.key
-    allocate-node-cidrs: "true"
     flex-volume-plugin-dir: /var/lib/kubelet/volumeplugins
 scheduler:
   extraArgs: {}
@@ -52,5 +53,6 @@ discovery:
     kubeConfigPath: /etc/kubernetes/admin.conf
 nodeRegistration:
   kubeletExtraArgs:
+    cloud-provider: ${KUBELET_CLOUD_PROVIDER}
     network-plugin: ${KUBELET_NETWORK_PLUGIN}
     volume-plugin-dir: /var/lib/kubelet/volumeplugins

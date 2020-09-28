@@ -1,10 +1,16 @@
 [Unit]
 Description=kubelet: The Kubernetes Node Agent
 Documentation=https://kubernetes.io/docs/home/
+Requires=afterburn.service
 Wants=network-online.target
+After=afterburn.service
 After=network-online.target
 
 [Service]
+CPUAccounting=true
+MemoryAccounting=true
+EnvironmentFile=/run/metadata/afterburn
+
 Environment="KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"
 Environment="KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml"
 # This is a file that "kubeadm init" and "kubeadm join" generates at runtime, populating the KUBELET_KUBEADM_ARGS variable dynamically

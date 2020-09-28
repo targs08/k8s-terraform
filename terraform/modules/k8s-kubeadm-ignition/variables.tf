@@ -1,5 +1,9 @@
 variable "cluster_name" {}
 
+variable "cloud_provider" {
+  default = "external"
+}
+
 variable "control_plane_host" {}
 
 variable "etcd_endpoints" {

@@ -40,6 +40,7 @@ locals {
     KUBE_ETCD_ENDPOINTS = var.etcd_endpoints
     KUBECONFIG = local.k8s_kubeconfig_path
 
+    KUBELET_CLOUD_PROVIDER = var.cloud_provider
     KUBELET_NETWORK_PLUGIN = var.network_plugin
   }
 }
