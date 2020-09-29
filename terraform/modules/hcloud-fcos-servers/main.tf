@@ -48,6 +48,13 @@ resource "hcloud_server" "servers" {
     lookup(var.config[count.index], "labels")
   )
 
+  lifecycle {
+    # Ignore changes in the AMI which force recreation of the resource. This
+    # avoids accidental deletion of nodes whenever a new Fedora CoreOs Release
+    # come out.
+    ignore_changes = [user_data]
+  }
+
   connection {
     host = self.ipv4_address
     private_key = tls_private_key.bootstrap.private_key_pem

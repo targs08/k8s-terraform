@@ -48,9 +48,13 @@ clusterDNS:
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: JoinConfiguration
+controlPlane:
+  localAPIEndpoint:
+    advertiseAddress: 0.0.0.0
+    bindPort: 6443
 discovery:
   file:
-    kubeConfigPath: /etc/kubernetes/admin.conf
+    kubeConfigPath: ${KUBECONFIG}
 nodeRegistration:
   kubeletExtraArgs:
     cloud-provider: ${KUBELET_CLOUD_PROVIDER}

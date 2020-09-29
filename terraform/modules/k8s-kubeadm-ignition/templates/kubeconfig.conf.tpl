@@ -8,9 +8,9 @@ contexts:
   - name: ${CLUSTER_NAME}
     context:
       cluster: ${CLUSTER_NAME}
-      user: kubernetes-admin
+      user: kubernetes
 users:
-  - name: kubernetes-admin
+  - name: kubernetes
     user:
       client-certificate-data: ${KUBE_CLIENT_CERT_DATA}
       client-key-data: ${KUBE_CLIENT_KEY_DATA}

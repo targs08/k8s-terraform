@@ -1,6 +1,7 @@
 [Unit]
 Description=Join node to Kubernetes
 ConditionFirstBoot=yes
+StartLimitBurst=5
 
 Wants=network-online.target
 After=network-online.target
@@ -17,8 +18,10 @@ ExecStartPre=/opt/bin/kubeadm init phase certs apiserver $KUBEADM_ARGS
 ExecStartPre=/opt/bin/kubeadm init phase certs apiserver-kubelet-client $KUBEADM_ARGS
 ExecStartPre=/opt/bin/kubeadm init phase certs front-proxy-client $KUBEADM_ARGS
 ExecStartPre=/opt/bin/kubeadm config images pull $KUBEADM_ARGS
-ExecStart=echo "kubeadm join"
-# ExecStart=/opt/bin/kubeadm join --control-plane $KUBEADM_ARGS
+ExecStart=/opt/bin/kubeadm join $KUBEADM_ARGS
+
+Restart=on-failure
+RestartSec=30
 
 [Install]
 RequiredBy=boot-complete.target

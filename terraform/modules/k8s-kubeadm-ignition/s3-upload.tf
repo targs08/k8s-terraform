@@ -10,8 +10,14 @@ resource "aws_s3_bucket_object" "tls" {
   content = local.tls_files[count.index].content
 }
 
-resource "aws_s3_bucket_object" "ignition" {
+resource "aws_s3_bucket_object" "ignition-master" {
   bucket = data.aws_s3_bucket.bucket.bucket
-  key    = format("%s/kubernetes/control-plane.ign", var.s3.path)
-  content = data.ignition_config.common.rendered
+  key    = format("%s/kubernetes/master.ign", var.s3.path)
+  content = data.ignition_config.master.rendered
+}
+
+resource "aws_s3_bucket_object" "ignition-worker" {
+  bucket = data.aws_s3_bucket.bucket.bucket
+  key    = format("%s/kubernetes/worker.ign", var.s3.path)
+  content = data.ignition_config.worker.rendered
 }

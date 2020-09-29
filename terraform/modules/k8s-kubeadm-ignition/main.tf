@@ -64,3 +64,19 @@ module "kubernetes-admin" {
 
   period = var.period
 }
+
+module "kubernetes-bootstrapper" {
+  source = "../tls/cert-request"
+  ca = module.ca
+
+  common_name = "kubernetes"
+  organization = "system:bootstrappers"
+
+  allowed_uses = [
+    "client_auth",
+    "digital_signature",
+    "key_encipherment",
+  ]
+
+  period = var.period
+}
